@@ -1,0 +1,2311 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بن مسيحلان للسفريات والسياحة - نظام إدارة شامل</title>
+  <meta name="description" content="نظام إدارة شامل لشركة بن مسيحلان للسفريات والسياحة وخدمات الحج والعمرة">
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--bg-color, #1e40af) 0%, var(--primary-color, #3b82f6) 25%, var(--secondary-color, #9333ea) 75%, #ec4899 100%);
+            min-height: 100%;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(147, 51, 234, 0.8) 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .floating-card {
+            background: var(--surface-color, rgba(255, 255, 255, 0.98));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+        }
+        
+        .floating-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--bg-color, #14b8a6) 0%, var(--primary-color, #3b82f6) 25%, var(--secondary-color, #9333ea) 75%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color, #3b82f6) 0%, var(--secondary-color, #9333ea) 100%);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 20px 40px -5px rgba(59, 130, 246, 0.5);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color, #3b82f6);
+        }
+        
+        .nav-glass {
+            background: var(--surface-color, rgba(255, 255, 255, 0.95));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: var(--text-color, #1f2937);
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary-color, #3b82f6);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .admin-panel {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+        }
+        
+        .admin-sidebar {
+            background: linear-gradient(180deg, #1f2937 0%, #374151 100%);
+            max-height: 100%;
+            overflow-y: auto;
+        }
+        
+        .admin-nav-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .admin-nav-item:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-right: 4px solid var(--primary-color, #3b82f6);
+        }
+        
+        .admin-nav-item.active {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-right: 4px solid var(--primary-color, #3b82f6);
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--primary-color, #3b82f6);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background-color: #10b981;
+        }
+        
+        .toast.error {
+            background-color: #ef4444;
+        }
+        
+        .toast.warning {
+            background-color: #f59e0b;
+        }
+        
+        .toast.info {
+            background-color: #3b82f6;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--surface-color, white);
+            border-radius: 16px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+        
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        .action-button {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+        }
+        
+        .action-button.edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .action-button.delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-button.view {
+            background: #10b981;
+            color: white;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-pending {
+            background-color: #fbbf24;
+            color: #92400e;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .status-processing {
+            background-color: #60a5fa;
+            color: #1e40af;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .status-completed {
+            background-color: #34d399;
+            color: #065f46;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .status-cancelled {
+            background-color: #f87171;
+            color: #991b1b;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, var(--surface-color, #ffffff) 0%, #f8fafc 100%);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color, #3b82f6), var(--secondary-color, #9333ea));
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.2);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            transition: transform 0.4s ease;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-filter-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-filter-btn.active {
+            background-color: var(--primary-color, #3b82f6) !important;
+            color: white !important;
+        }
+        
+        .service-card {
+            background: linear-gradient(145deg, var(--surface-color, #ffffff) 0%, #f8fafc 100%);
+            border: 2px solid transparent;
+            transition: all 0.5s ease;
+            border-radius: 24px;
+            padding: 2rem;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -8px rgba(59, 130, 246, 0.4);
+        }
+        
+        .package-card {
+            background: linear-gradient(145deg, var(--surface-color, #ffffff) 0%, #f8fafc 100%);
+            border: 3px solid transparent;
+            transition: all 0.6s ease;
+            border-radius: 28px;
+            padding: 2rem;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-12px) scale(1.04);
+            box-shadow: 0 40px 80px -12px rgba(59, 130, 246, 0.5);
+        }
+        
+        .stats-card {
+            background: linear-gradient(145deg, var(--surface-color, rgba(255, 255, 255, 0.9)) 0%, rgba(248, 250, 252, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.3);
+        }
+        
+        .travel-icon {
+            background: linear-gradient(135deg, var(--bg-color, #14b8a6) 0%, var(--primary-color, #3b82f6) 25%, var(--secondary-color, #9333ea) 75%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3.5rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        .star {
+            font-size: 1.5rem;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .star:hover,
+        .star.active {
+            color: #fbbf24;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: 80%;
+                padding: 2rem 0;
+            }
+            
+            .hero-section h2 {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+            }
+            
+            .floating-card {
+                margin: 1rem;
+                padding: 1.5rem !important;
+            }
+            
+            .nav-glass .flex {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .admin-sidebar {
+                width: 100%;
+                min-height: auto;
+                position: relative;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="min-h-full"><!-- Navigation -->
+  <nav class="nav-glass fixed top-0 w-full z-50" role="navigation">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+     <div class="flex items-center">
+      <div class="flex-shrink-0">
+       <h1 class="text-2xl font-bold gradient-text" id="nav-company-name">بن مسيحلان للسفريات والسياحة</h1>
+       <p class="text-sm text-gray-600" id="nav-company-tagline">وخدمات الحج والعمرة</p>
+      </div>
+     </div>
+     <div class="hidden md:block">
+      <div class="mr-10 flex items-baseline space-x-4 space-x-reverse"><button onclick="showTab('home')" class="tab-button active text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">الرئيسية</button> <button onclick="showTab('services')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">خدماتنا</button> <button onclick="showTab('packages')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">الباقات</button> <button onclick="showTab('booking')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">احجز الآن</button> <button onclick="showTab('tracking')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">متابعة المعاملة</button> <button onclick="showTab('gallery')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">معرض الصور</button> <button onclick="showTab('admin')" class="tab-button text-gray-900 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all relative"> الإدارة <span id="notificationBadge" class="notification-badge hidden">0</span> </button>
+      </div>
+     </div>
+     <div class="md:hidden"><button onclick="toggleMobileMenu()" class="text-gray-900 hover:text-blue-600 p-2 rounded-lg transition-all">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+       </svg></button>
+     </div>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 py-4">
+     <div class="flex flex-col space-y-2"><button onclick="showTab('home'); closeMobileMenu();" class="tab-button mobile-tab active text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">الرئيسية</button> <button onclick="showTab('services'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">خدماتنا</button> <button onclick="showTab('packages'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">الباقات</button> <button onclick="showTab('booking'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">احجز الآن</button> <button onclick="showTab('tracking'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">متابعة المعاملة</button> <button onclick="showTab('gallery'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">معرض الصور</button> <button onclick="showTab('admin'); closeMobileMenu();" class="tab-button mobile-tab text-gray-900 hover:text-blue-600 px-4 py-3 text-right rounded-lg transition-all">الإدارة</button>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Home Tab -->
+  <div id="home-tab" class="tab-content active">
+   <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-full">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+       <div class="text-center lg:text-right text-white">
+        <h2 class="text-5xl md:text-7xl font-bold mb-6 leading-tight" id="hero-title">رحلات مميزة إلى أجمل الوجهات</h2>
+        <p class="text-xl md:text-2xl mb-8 opacity-90 leading-relaxed" id="hero-subtitle">نحن نقدم أفضل الخدمات السياحية والدينية بأعلى معايير الجودة والراحة</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"><button onclick="showTab('booking')" class="btn-primary text-lg px-8 py-4">احجز رحلتك الآن</button> <button onclick="showTab('packages')" class="btn-secondary text-lg px-8 py-4">تصفح الباقات</button>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 gap-6">
+        <div class="stats-card text-center">
+         <div class="travel-icon">
+          🕋
+         </div>
+         <h3 class="text-2xl font-bold text-gray-900 mb-2" id="stats-hajj-umrah">150</h3>
+         <p class="text-gray-600">رحلة حج وعمرة</p>
+        </div>
+        <div class="stats-card text-center">
+         <div class="travel-icon">
+          ✈️
+         </div>
+         <h3 class="text-2xl font-bold text-gray-900 mb-2" id="stats-tourism">200</h3>
+         <p class="text-gray-600">رحلة سياحية</p>
+        </div>
+        <div class="stats-card text-center">
+         <div class="travel-icon">
+          😊
+         </div>
+         <h3 class="text-2xl font-bold text-gray-900 mb-2" id="stats-happy-clients">500</h3>
+         <p class="text-gray-600">عميل سعيد</p>
+        </div>
+        <div class="stats-card text-center">
+         <div class="travel-icon">
+          ⭐
+         </div>
+         <h3 class="text-2xl font-bold text-gray-900 mb-2" id="stats-rating">4.8</h3>
+         <p class="text-gray-600">تقييم العملاء</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="py-20 bg-gray-900 text-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+     <div class="text-center mb-16">
+      <h3 class="text-4xl font-bold mb-4">تواصل معنا</h3>
+      <p class="text-xl opacity-90">نحن هنا لخدمتك على مدار الساعة</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="floating-card text-center p-8">
+       <div class="text-5xl mb-6">
+        📞
+       </div>
+       <h4 class="text-2xl font-semibold mb-4 text-gray-900">اتصل بنا</h4>
+       <p class="text-lg text-gray-700" id="contact-phone">777000584</p>
+      </div>
+      <div class="floating-card text-center p-8">
+       <div class="text-5xl mb-6">
+        💬
+       </div>
+       <h4 class="text-2xl font-semibold mb-4 text-gray-900">واتساب</h4><a href="https://wa.me/967777000584" target="_blank" rel="noopener noreferrer" class="text-lg text-blue-600 hover:text-blue-800 transition-colors">777000584</a>
+      </div>
+      <div class="floating-card text-center p-8">
+       <div class="text-5xl mb-6">
+        ✉️
+       </div>
+       <h4 class="text-2xl font-semibold mb-4 text-gray-900">البريد الإلكتروني</h4>
+       <p class="text-lg text-gray-700" id="contact-email">bnmusaihlan@gmail.com</p>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- Services Tab -->
+  <div id="services-tab" class="tab-content">
+   <section class="py-20 bg-gray-50 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16">
+      <h3 class="text-4xl font-bold gradient-text mb-6">خدماتنا المميزة</h3>
+      <p class="text-xl text-gray-600">نقدم مجموعة شاملة من الخدمات السياحية والدينية</p>
+     </div>
+     <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"><!-- Services will be loaded dynamically -->
+     </div>
+    </div>
+   </section>
+  </div><!-- Packages Tab -->
+  <div id="packages-tab" class="tab-content">
+   <section class="py-20 bg-white mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16">
+      <h3 class="text-4xl font-bold gradient-text mb-6">باقاتنا المميزة</h3>
+      <p class="text-xl text-gray-600">اختر الباقة التي تناسبك من مجموعة واسعة من العروض</p>
+     </div>
+     <div id="packagesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Packages will be loaded dynamically -->
+     </div>
+    </div>
+   </section>
+  </div><!-- Booking Tab -->
+  <div id="booking-tab" class="tab-content">
+   <section class="py-20 bg-gray-50 mt-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12">
+      <h3 class="text-4xl font-bold gradient-text mb-6">احجز رحلتك الآن</h3>
+      <p class="text-xl text-gray-600">املأ النموذج وسنتواصل معك في أقرب وقت</p>
+     </div>
+     <div class="floating-card p-10">
+      <form id="bookingForm" class="space-y-8">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div><label for="name" class="block text-sm font-medium text-gray-700 mb-3">الاسم الكامل *</label> <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="phone" class="block text-sm font-medium text-gray-700 mb-3">رقم الهاتف *</label> <input type="tel" id="phone" name="phone" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="email" class="block text-sm font-medium text-gray-700 mb-3">البريد الإلكتروني</label> <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="passport_number" class="block text-sm font-medium text-gray-700 mb-3">رقم الجواز *</label> <input type="text" id="passport_number" name="passport_number" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="service" class="block text-sm font-medium text-gray-700 mb-3">نوع الخدمة *</label> <select id="service" name="service" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"> <option value="">اختر نوع الخدمة</option> <option value="عمرة">عمرة</option> <option value="حج">حج</option> <option value="سياحة">سياحة</option> <option value="تذاكر طيران">تذاكر طيران</option> <option value="حجز فندق">حجز فندق</option> </select>
+        </div>
+        <div><label for="destination" class="block text-sm font-medium text-gray-700 mb-3">الوجهة المطلوبة</label> <input type="text" id="destination" name="destination" placeholder="مثال: مكة المكرمة، دبي، تركيا" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="date" class="block text-sm font-medium text-gray-700 mb-3">تاريخ السفر المفضل</label> <input type="date" id="date" name="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="adults" class="block text-sm font-medium text-gray-700 mb-3">عدد البالغين</label> <input type="number" id="adults" name="adults" min="1" value="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+        <div><label for="children" class="block text-sm font-medium text-gray-700 mb-3">عدد الأطفال</label> <input type="number" id="children" name="children" min="0" value="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+       </div>
+       <div><label for="message" class="block text-sm font-medium text-gray-700 mb-3">ملاحظات إضافية</label> <textarea id="message" name="message" rows="4" placeholder="أي طلبات خاصة أو ملاحظات..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"></textarea>
+       </div>
+       <div class="text-center"><label class="block text-sm font-medium text-gray-700 mb-3">تقييم الخدمة (اختياري)</label>
+        <div class="rating-stars" id="ratingStars"><span class="star" data-rating="1">⭐</span> <span class="star" data-rating="2">⭐</span> <span class="star" data-rating="3">⭐</span> <span class="star" data-rating="4">⭐</span> <span class="star" data-rating="5">⭐</span>
+        </div><input type="hidden" id="rating" name="rating" value="0">
+       </div>
+       <div class="text-center"><button type="submit" id="submitBtn" class="btn-primary text-lg px-12 py-4 flex items-center justify-center mx-auto"> <span id="submitText">إرسال طلب الحجز</span>
+         <div id="submitSpinner" class="loading-spinner mr-3 hidden"></div></button>
+       </div>
+      </form>
+     </div>
+    </div>
+   </section>
+  </div><!-- Transaction Tracking Tab -->
+  <div id="tracking-tab" class="tab-content">
+   <section class="py-20 bg-gray-50 mt-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-12">
+      <h3 class="text-4xl font-bold gradient-text mb-6">متابعة المعاملة</h3>
+      <p class="text-xl text-gray-600">أدخل رقم الجواز لمتابعة حالة معاملتك</p>
+     </div>
+     <div class="floating-card p-8 mb-8">
+      <form id="trackingForm" class="flex flex-col sm:flex-row gap-4">
+       <div class="flex-1"><label for="tracking_passport" class="block text-sm font-medium text-gray-700 mb-3">رقم الجواز</label> <input type="text" id="tracking_passport" name="tracking_passport" required placeholder="أدخل رقم الجواز" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+       </div>
+       <div class="flex items-end"><button type="submit" id="trackBtn" class="btn-primary px-8 py-3 flex items-center"> <span id="trackText">بحث</span>
+         <div id="trackSpinner" class="loading-spinner mr-3 hidden"></div></button>
+       </div>
+      </form>
+     </div>
+     <div id="trackingResults" class="hidden">
+      <div class="floating-card p-8">
+       <h4 class="text-2xl font-bold gradient-text mb-6">تفاصيل المعاملة</h4>
+       <div id="transactionDetails"></div>
+      </div>
+     </div>
+     <div id="noResults" class="hidden">
+      <div class="floating-card p-8 text-center">
+       <div class="text-6xl mb-4">
+        🔍
+       </div>
+       <h4 class="text-xl font-semibold text-gray-900 mb-2">لم يتم العثور على معاملة</h4>
+       <p class="text-gray-600">تأكد من رقم الجواز المدخل أو تواصل معنا للمساعدة</p>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- Gallery Tab -->
+  <div id="gallery-tab" class="tab-content">
+   <section class="py-20 bg-gray-50 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16">
+      <h3 class="text-4xl font-bold gradient-text mb-6">معرض الصور</h3>
+      <p class="text-xl text-gray-600">استمتع بمشاهدة صور من رحلاتنا المميزة</p>
+     </div>
+     <div class="flex flex-wrap justify-center gap-4 mb-12"><button onclick="filterGallery('all')" class="gallery-filter-btn active bg-blue-600 text-white px-6 py-3 rounded-full font-medium transition-all hover:bg-blue-700"> جميع الصور </button> <button onclick="filterGallery('umrah')" class="gallery-filter-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium transition-all hover:bg-gray-300"> 🕋 العمرة </button> <button onclick="filterGallery('hajj')" class="gallery-filter-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium transition-all hover:bg-gray-300"> 🌟 الحج </button> <button onclick="filterGallery('tourism')" class="gallery-filter-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium transition-all hover:bg-gray-300"> ✈️ السياحة </button> <button onclick="filterGallery('hotel')" class="gallery-filter-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium transition-all hover:bg-gray-300"> 🏨 الفنادق </button>
+     </div>
+     <div id="galleryContainer" class="gallery-grid">
+      <div class="text-center col-span-full py-12">
+       <div class="text-6xl mb-4">
+        📸
+       </div>
+       <p class="text-gray-600">لا توجد صور في المعرض حالياً</p>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- Admin Panel Tab -->
+  <div id="admin-tab" class="tab-content"><!-- Login Form -->
+   <div id="adminLogin" class="min-h-full admin-panel flex items-center justify-center">
+    <div class="floating-card p-10 w-full max-w-md">
+     <div class="text-center mb-8">
+      <h3 class="text-3xl font-bold gradient-text mb-4">تسجيل دخول الإدارة</h3>
+      <p class="text-gray-600">أدخل بيانات الدخول للوصول للوحة الإدارة</p>
+     </div>
+     <form id="loginForm" class="space-y-6">
+      <div><label for="loginUsername" class="block text-sm font-medium text-gray-700 mb-3">اسم المستخدم</label> <input type="text" id="loginUsername" name="username" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+      </div>
+      <div><label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-3">كلمة المرور</label> <input type="password" id="loginPassword" name="password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+      </div><button type="submit" id="loginBtn" class="btn-primary w-full py-3 flex items-center justify-center"> <span id="loginText">تسجيل الدخول</span>
+       <div id="loginSpinner" class="loading-spinner mr-3 hidden"></div></button>
+     </form>
+     <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">المستخدم الافتراضي: <strong>admin</strong><br>
+        كلمة المرور الافتراضية: <strong>admin123</strong></p>
+     </div>
+    </div>
+   </div><!-- Admin Dashboard -->
+   <div id="adminDashboard" class="hidden min-h-full bg-gray-100">
+    <div class="flex"><!-- Sidebar -->
+     <div class="admin-sidebar w-64 min-h-full text-white">
+      <div class="p-6">
+       <h2 class="text-2xl font-bold mb-8">لوحة الإدارة</h2>
+       <nav class="space-y-1"><button onclick="showAdminSection('dashboard')" class="admin-nav-item active w-full text-right px-4 py-3 rounded-lg flex items-center"> <span class="text-xl ml-3">📊</span> <span>لوحة المعلومات</span> </button> <button onclick="showAdminSection('transactions')" class="admin-nav-item w-full text-right px-4 py-3 rounded-lg flex items-center"> <span class="text-xl ml-3">📋</span> <span>إدارة المعاملات</span> </button> <button onclick="showAdminSection('services-packages')" class="admin-nav-item w-full text-right px-4 py-3 rounded-lg flex items-center"> <span class="text-xl ml-3">🎯</span> <span>الخدمات والباقات</span> </button> <button onclick="showAdminSection('gallery-admin')" class="admin-nav-item w-full text-right px-4 py-3 rounded-lg flex items-center"> <span class="text-xl ml-3">🖼️</span> <span>إدارة المعرض</span> </button> <button onclick="showAdminSection('settings')" class="admin-nav-item w-full text-right px-4 py-3 rounded-lg flex items-center"> <span class="text-xl ml-3">⚙️</span> <span>إعدادات الموقع</span> </button> <button onclick="logout()" class="admin-nav-item w-full text-right px-4 py-3 rounded-lg text-red-300 hover:text-red-100 flex items-center"> <span class="text-xl ml-3">🚪</span> <span>تسجيل الخروج</span> </button>
+       </nav>
+      </div>
+     </div><!-- Main Content -->
+     <div class="flex-1 p-8 overflow-y-auto max-h-full"><!-- Dashboard Section -->
+      <div id="dashboard-section" class="admin-section">
+       <h3 class="text-3xl font-bold gradient-text mb-8">لوحة المعلومات</h3>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="kpi-card">
+         <div class="flex items-center justify-between">
+          <div>
+           <p class="text-sm text-gray-600">إجمالي المعاملات</p>
+           <p class="text-3xl font-bold gradient-text" id="dashboardTotalTransactions">0</p>
+          </div>
+          <div class="text-4xl text-blue-600">
+           📋
+          </div>
+         </div>
+        </div>
+        <div class="kpi-card">
+         <div class="flex items-center justify-between">
+          <div>
+           <p class="text-sm text-gray-600">قيد الانتظار</p>
+           <p class="text-3xl font-bold gradient-text" id="dashboardPendingTransactions">0</p>
+          </div>
+          <div class="text-4xl text-yellow-600">
+           ⏳
+          </div>
+         </div>
+        </div>
+        <div class="kpi-card">
+         <div class="flex items-center justify-between">
+          <div>
+           <p class="text-sm text-gray-600">مكتملة</p>
+           <p class="text-3xl font-bold gradient-text" id="dashboardCompletedTransactions">0</p>
+          </div>
+          <div class="text-4xl text-green-600">
+           ✅
+          </div>
+         </div>
+        </div>
+        <div class="kpi-card">
+         <div class="flex items-center justify-between">
+          <div>
+           <p class="text-sm text-gray-600">الصور</p>
+           <p class="text-3xl font-bold gradient-text" id="dashboardTotalImages">0</p>
+          </div>
+          <div class="text-4xl text-purple-600">
+           📸
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="floating-card p-6">
+         <h4 class="text-xl font-bold text-gray-900 mb-4">المعاملات الشهرية</h4>
+         <div class="chart-container">
+          <canvas id="monthlyTransactionsChart"></canvas>
+         </div>
+        </div>
+        <div class="floating-card p-6">
+         <h4 class="text-xl font-bold text-gray-900 mb-4">توزيع الخدمات</h4>
+         <div class="chart-container">
+          <canvas id="servicesDistributionChart"></canvas>
+         </div>
+        </div>
+       </div>
+      </div><!-- Transactions Section -->
+      <div id="transactions-section" class="admin-section hidden">
+       <h3 class="text-3xl font-bold gradient-text mb-8">إدارة المعاملات</h3>
+       <div class="floating-card overflow-hidden">
+        <div class="overflow-x-auto">
+         <table class="data-table w-full">
+          <thead>
+           <tr>
+            <th>الاسم</th>
+            <th>رقم الجواز</th>
+            <th>الخدمة</th>
+            <th>الهاتف</th>
+            <th>التقييم</th>
+            <th>الحالة</th>
+            <th>تاريخ الإنشاء</th>
+            <th>الإجراءات</th>
+           </tr>
+          </thead>
+          <tbody id="adminTransactionsTable">
+           <tr>
+            <td colspan="8" class="text-center text-gray-500 py-8">لا توجد معاملات حالياً</td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+      </div><!-- Services & Packages Section -->
+      <div id="services-packages-section" class="admin-section hidden">
+       <h3 class="text-3xl font-bold gradient-text mb-8">إدارة الخدمات والباقات</h3>
+       <div class="floating-card p-6 mb-8">
+        <div class="flex justify-between items-center mb-6">
+         <h4 class="text-2xl font-bold text-gray-900">الخدمات</h4><button onclick="openAddServiceModal()" class="btn-primary px-6 py-3"> ➕ إضافة خدمة </button>
+        </div>
+        <div id="servicesManagementGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Services will be loaded dynamically -->
+        </div>
+       </div>
+       <div class="floating-card p-6">
+        <div class="flex justify-between items-center mb-6">
+         <h4 class="text-2xl font-bold text-gray-900">الباقات</h4><button onclick="openAddPackageModal()" class="btn-primary px-6 py-3"> ➕ إضافة باقة </button>
+        </div>
+        <div id="packagesManagementGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Packages will be loaded dynamically -->
+        </div>
+       </div>
+      </div><!-- Gallery Admin Section -->
+      <div id="gallery-admin-section" class="admin-section hidden">
+       <div class="flex justify-between items-center mb-8">
+        <h3 class="text-3xl font-bold gradient-text">إدارة معرض الصور</h3><button onclick="openAddImageModal()" class="btn-primary px-6 py-3"> 📸 إضافة صورة </button>
+       </div>
+       <div id="adminGalleryContainer" class="gallery-grid">
+        <div class="text-center col-span-full py-12">
+         <div class="text-6xl mb-4">
+          📸
+         </div>
+         <p class="text-gray-600">لا توجد صور في المعرض حالياً</p>
+        </div>
+       </div>
+      </div><!-- Settings Section -->
+      <div id="settings-section" class="admin-section hidden">
+       <h3 class="text-3xl font-bold gradient-text mb-8">إعدادات الموقع</h3>
+       <div class="floating-card p-8">
+        <form id="settingsForm" class="space-y-8">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div><label for="settings_company_name" class="block text-sm font-medium text-gray-700 mb-3">اسم الشركة</label> <input type="text" id="settings_company_name" name="company_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          </div>
+          <div><label for="settings_company_tagline" class="block text-sm font-medium text-gray-700 mb-3">شعار الشركة</label> <input type="text" id="settings_company_tagline" name="company_tagline" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          </div>
+          <div><label for="settings_phone" class="block text-sm font-medium text-gray-700 mb-3">رقم الهاتف</label> <input type="tel" id="settings_phone" name="phone_number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          </div>
+          <div><label for="settings_email" class="block text-sm font-medium text-gray-700 mb-3">البريد الإلكتروني</label> <input type="email" id="settings_email" name="email_address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          </div>
+         </div>
+         <div><label for="settings_hero_title" class="block text-sm font-medium text-gray-700 mb-3">العنوان الرئيسي</label> <input type="text" id="settings_hero_title" name="hero_title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+         </div>
+         <div><label for="settings_hero_subtitle" class="block text-sm font-medium text-gray-700 mb-3">العنوان الفرعي</label> <textarea id="settings_hero_subtitle" name="hero_subtitle" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"></textarea>
+         </div>
+         <div class="text-center"><button type="submit" id="saveSettingsBtn" class="btn-primary px-8 py-3 flex items-center justify-center mx-auto"> <span id="saveSettingsText">حفظ الإعدادات</span>
+           <div id="saveSettingsSpinner" class="loading-spinner mr-3 hidden"></div></button>
+         </div>
+        </form>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Modals --> <!-- Add Image Modal -->
+  <div id="addImageModal" class="modal hidden">
+   <div class="modal-content floating-card p-8 max-w-md w-full">
+    <h3 class="text-2xl font-bold gradient-text mb-6">إضافة صورة جديدة</h3>
+    <form id="addImageForm">
+     <div class="space-y-6">
+      <div><label for="imageTitle" class="block text-sm font-medium text-gray-700 mb-3">عنوان الصورة</label> <input type="text" id="imageTitle" name="title" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+      </div>
+      <div><label for="imageUrl" class="block text-sm font-medium text-gray-700 mb-3">رابط الصورة</label> <input type="url" id="imageUrl" name="url" required placeholder="https://example.com/image.jpg" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+      </div>
+      <div><label for="imageType" class="block text-sm font-medium text-gray-700 mb-3">نوع الصورة</label> <select id="imageType" name="type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"> <option value="umrah">عمرة</option> <option value="hajj">حج</option> <option value="tourism">سياحة</option> <option value="hotel">فنادق</option> </select>
+      </div>
+     </div>
+     <div class="flex gap-4 mt-8"><button type="submit" id="addImageBtn" class="flex-1 btn-primary py-3 flex items-center justify-center"> <span id="addImageText">إضافة</span>
+       <div id="addImageSpinner" class="loading-spinner mr-3 hidden"></div></button> <button type="button" onclick="closeAddImageModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-400 transition-colors">إلغاء</button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Status Update Modal -->
+  <div id="statusModal" class="modal hidden">
+   <div class="modal-content floating-card p-8 max-w-md w-full">
+    <h3 class="text-2xl font-bold gradient-text mb-6">تحديث حالة المعاملة</h3>
+    <form id="statusUpdateForm"><input type="hidden" id="updateTransactionId">
+     <div class="mb-6"><label for="newStatus" class="block text-sm font-medium text-gray-700 mb-3">الحالة الجديدة</label> <select id="newStatus" name="newStatus" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"> <option value="pending">قيد الانتظار</option> <option value="processing">قيد المعالجة</option> <option value="completed">مكتملة</option> <option value="cancelled">ملغية</option> </select>
+     </div>
+     <div class="flex gap-4"><button type="submit" id="updateStatusBtn" class="flex-1 btn-primary py-3 flex items-center justify-center"> <span id="updateStatusText">تحديث</span>
+       <div id="updateStatusSpinner" class="loading-spinner mr-3 hidden"></div></button> <button type="button" onclick="closeStatusModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-400 transition-colors">إلغاء</button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+     <div class="text-center md:text-right">
+      <h4 class="text-2xl font-bold mb-4 gradient-text" id="footer-company-name">بن مسيحلان للسفريات والسياحة</h4>
+      <p class="text-gray-400 mb-4" id="footer-company-tagline">وخدمات الحج والعمرة</p>
+      <p class="text-gray-400">نظام إدارة شامل ومتكامل</p>
+     </div>
+     <div class="text-center">
+      <h5 class="text-lg font-semibold mb-4">خدماتنا</h5>
+      <ul class="space-y-2 text-gray-400">
+       <li>الحج والعمرة</li>
+       <li>السفر والسياحة</li>
+       <li>حجز الفنادق</li>
+       <li>تذاكر الطيران</li>
+       <li>نظام إدارة متكامل</li>
+      </ul>
+     </div>
+     <div class="text-center md:text-left">
+      <h5 class="text-lg font-semibold mb-4">تواصل معنا</h5>
+      <div class="space-y-2 text-gray-400">
+       <p id="footer-phone">📞 777000584</p>
+       <p id="footer-email">✉️ bnmusaihlan@gmail.com</p>
+       <p>📍 صنعاء – الأصبحي</p>
+      </div>
+     </div>
+    </div>
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+     <p class="text-gray-400">© 2024 بن مسيحلان للسفريات والسياحة. جميع الحقوق محفوظة</p>
+    </div>
+   </div>
+  </footer>
+  <script>
+        // Configuration and global variables
+        const defaultConfig = {
+            company_name: "بن مسيحلان للسفريات والسياحة",
+            company_tagline: "وخدمات الحج والعمرة",
+            hero_title: "رحلات مميزة إلى أجمل الوجهات",
+            hero_subtitle: "نحن نقدم أفضل الخدمات السياحية والدينية بأعلى معايير الجودة والراحة",
+            phone_number: "777000584",
+            email_address: "bnmusaihlan@gmail.com",
+            background_color: "#1e40af",
+            surface_color: "#ffffff",
+            text_color: "#1f2937",
+            primary_action_color: "#3b82f6",
+            secondary_action_color: "#10b981",
+            font_family: "Noto Sans Arabic",
+            font_size: 16
+        };
+
+        let currentData = [];
+        let recordCount = 0;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let charts = {};
+        let notificationCount = 0;
+
+        // Data handler for SDK
+        const dataHandler = {
+            onDataChanged(data) {
+                currentData = data;
+                recordCount = data.length;
+                updateAllTables();
+                updateDashboardStats();
+                updateGallery();
+                updateSiteContent();
+                loadSettingsForm();
+                updateServicesAndPackages();
+                updateNotificationBadge();
+                updateCharts();
+            }
+        };
+
+        // Initialize Data SDK
+        async function initializeDataSdk() {
+            if (window.dataSdk) {
+                const result = await window.dataSdk.init(dataHandler);
+                if (!result.isOk) {
+                    console.error("Failed to initialize data SDK");
+                } else {
+                    await createDefaultData();
+                }
+            }
+        }
+
+        // Create default data
+        async function createDefaultData() {
+            // Create default admin user
+            const users = currentData.filter(item => item.type === 'user');
+            if (users.length === 0) {
+                const defaultAdmin = {
+                    id: 'admin-' + Date.now(),
+                    type: 'user',
+                    username: 'admin',
+                    password: 'admin123',
+                    role: 'admin',
+                    permissions: 'all',
+                    active: true,
+                    last_login: new Date().toISOString(),
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (window.dataSdk) {
+                    await window.dataSdk.create(defaultAdmin);
+                }
+            }
+
+            // Create default services
+            const services = currentData.filter(item => item.type === 'service');
+            if (services.length === 0) {
+                const defaultServices = [
+                    {
+                        id: 'service-umrah',
+                        type: 'service',
+                        service_name: 'الحج والعمرة',
+                        service_description: 'برامج حج وعمرة مميزة مع أفضل الخدمات والإقامة الفاخرة',
+                        service_icon: '🕋',
+                        service_active: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'service-tourism',
+                        type: 'service',
+                        service_name: 'السفر والسياحة',
+                        service_description: 'رحلات سياحية إلى أجمل الوجهات العالمية مع برامج متنوعة',
+                        service_icon: '✈️',
+                        service_active: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'service-hotels',
+                        type: 'service',
+                        service_name: 'الحجوزات الفندقية',
+                        service_description: 'حجز أفضل الفنادق بأسعار مناسبة في جميع أنحاء العالم',
+                        service_icon: '🏨',
+                        service_active: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'service-flights',
+                        type: 'service',
+                        service_name: 'تذاكر الطيران',
+                        service_description: 'حجز تذاكر الطيران بأفضل الأسعار مع جميع شركات الطيران',
+                        service_icon: '🎫',
+                        service_active: true,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                for (const service of defaultServices) {
+                    if (window.dataSdk) {
+                        await window.dataSdk.create(service);
+                    }
+                }
+            }
+
+            // Create default packages
+            const packages = currentData.filter(item => item.type === 'package');
+            if (packages.length === 0) {
+                const defaultPackages = [
+                    {
+                        id: 'package-umrah-economy',
+                        type: 'package',
+                        package_name: 'باقة العمرة الاقتصادية',
+                        package_description: '7 أيام / 6 ليالي',
+                        package_price: 2500,
+                        package_duration: '7 أيام',
+                        package_features: 'تذاكر الطيران,الإقامة في فندق 3 نجوم,النقل من وإلى المطار,زيارة المعالم الدينية',
+                        package_image: '🕋',
+                        package_active: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'package-umrah-premium',
+                        type: 'package',
+                        package_name: 'باقة العمرة المميزة',
+                        package_description: '10 أيام / 9 ليالي',
+                        package_price: 4200,
+                        package_duration: '10 أيام',
+                        package_features: 'تذاكر الطيران,الإقامة في فندق 4 نجوم,النقل الفاخر,جولات سياحية,وجبات مجانية',
+                        package_image: '🌟',
+                        package_active: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'package-hajj-complete',
+                        type: 'package',
+                        package_name: 'باقة الحج الشاملة',
+                        package_description: '15 يوم / 14 ليلة',
+                        package_price: 8500,
+                        package_duration: '15 يوم',
+                        package_features: 'تذاكر الطيران,الإقامة في فندق 5 نجوم,النقل الفاخر,مرشد ديني متخصص,جميع الوجبات',
+                        package_image: '👑',
+                        package_active: true,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                for (const pkg of defaultPackages) {
+                    if (window.dataSdk) {
+                        await window.dataSdk.create(pkg);
+                    }
+                }
+            }
+        }
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Add active class to clicked button
+            const activeButtons = document.querySelectorAll(`[onclick="showTab('${tabName}')"]`);
+            activeButtons.forEach(btn => {
+                btn.classList.add('active');
+            });
+        }
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.add('hidden');
+        }
+
+        // Admin section management
+        function showAdminSection(sectionName) {
+            // Hide all admin sections
+            const sections = document.querySelectorAll('.admin-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.admin-nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            const selectedSection = document.getElementById(sectionName + '-section');
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+            }
+            
+            // Add active class to clicked nav item
+            const activeNavItem = document.querySelector(`[onclick="showAdminSection('${sectionName}')"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Booking form handling
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (recordCount >= 999) {
+                showToast('تم الوصول للحد الأقصى من المعاملات (999). يرجى حذف بعض المعاملات أولاً.', 'warning');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
+            
+            submitSpinner.classList.remove('hidden');
+            submitText.textContent = 'جاري الإرسال...';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const bookingData = {
+                    id: 'booking-' + Date.now(),
+                    type: 'transaction',
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    email: formData.get('email') || '',
+                    passport_number: formData.get('passport_number'),
+                    service: formData.get('service'),
+                    destination: formData.get('destination') || '',
+                    date: formData.get('date') || '',
+                    adults: parseInt(formData.get('adults')) || 1,
+                    children: parseInt(formData.get('children')) || 0,
+                    message: formData.get('message') || '',
+                    rating: parseInt(formData.get('rating')) || 0,
+                    status: 'pending',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (window.dataSdk) {
+                    const result = await window.dataSdk.create(bookingData);
+                    if (result.isOk) {
+                        showToast('تم إرسال طلب الحجز بنجاح! سنتواصل معك قريباً.', 'success');
+                        this.reset();
+                        resetRating();
+                    } else {
+                        showToast('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.', 'error');
+                    }
+                }
+            } catch (error) {
+                showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.', 'error');
+            } finally {
+                submitSpinner.classList.add('hidden');
+                submitText.textContent = 'إرسال طلب الحجز';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Rating system
+        function setupRating() {
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+            
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    const rating = index + 1;
+                    ratingInput.value = rating;
+                    
+                    stars.forEach((s, i) => {
+                        if (i < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseover', () => {
+                    stars.forEach((s, i) => {
+                        if (i <= index) {
+                            s.style.color = '#fbbf24';
+                        } else {
+                            s.style.color = '#d1d5db';
+                        }
+                    });
+                });
+            });
+            
+            document.getElementById('ratingStars').addEventListener('mouseleave', () => {
+                const currentRating = parseInt(ratingInput.value) || 0;
+                stars.forEach((s, i) => {
+                    if (i < currentRating) {
+                        s.style.color = '#fbbf24';
+                    } else {
+                        s.style.color = '#d1d5db';
+                    }
+                });
+            });
+        }
+
+        function resetRating() {
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+            
+            ratingInput.value = 0;
+            stars.forEach(star => {
+                star.classList.remove('active');
+                star.style.color = '#d1d5db';
+            });
+        }
+
+        // Transaction tracking
+        document.getElementById('trackingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const trackBtn = document.getElementById('trackBtn');
+            const trackText = document.getElementById('trackText');
+            const trackSpinner = document.getElementById('trackSpinner');
+            const passportNumber = document.getElementById('tracking_passport').value.trim();
+            
+            trackSpinner.classList.remove('hidden');
+            trackText.textContent = 'جاري البحث...';
+            trackBtn.disabled = true;
+            
+            try {
+                const transaction = currentData.find(item => 
+                    item.type === 'transaction' && 
+                    item.passport_number === passportNumber
+                );
+                
+                const resultsDiv = document.getElementById('trackingResults');
+                const noResultsDiv = document.getElementById('noResults');
+                
+                if (transaction) {
+                    displayTransactionDetails(transaction);
+                    resultsDiv.classList.remove('hidden');
+                    noResultsDiv.classList.add('hidden');
+                } else {
+                    resultsDiv.classList.add('hidden');
+                    noResultsDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                showToast('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.', 'error');
+            } finally {
+                trackSpinner.classList.add('hidden');
+                trackText.textContent = 'بحث';
+                trackBtn.disabled = false;
+            }
+        });
+
+        function displayTransactionDetails(transaction) {
+            const detailsDiv = document.getElementById('transactionDetails');
+            const statusClass = getStatusClass(transaction.status);
+            const statusText = getStatusText(transaction.status);
+            
+            detailsDiv.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h5 class="font-semibold text-gray-900 mb-2">معلومات العميل</h5>
+                        <p><strong>الاسم:</strong> ${transaction.name}</p>
+                        <p><strong>رقم الهاتف:</strong> ${transaction.phone}</p>
+                        <p><strong>رقم الجواز:</strong> ${transaction.passport_number}</p>
+                        ${transaction.email ? `<p><strong>البريد الإلكتروني:</strong> ${transaction.email}</p>` : ''}
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-900 mb-2">تفاصيل الخدمة</h5>
+                        <p><strong>نوع الخدمة:</strong> ${transaction.service}</p>
+                        ${transaction.destination ? `<p><strong>الوجهة:</strong> ${transaction.destination}</p>` : ''}
+                        ${transaction.date ? `<p><strong>تاريخ السفر:</strong> ${new Date(transaction.date).toLocaleDateString('ar-SA')}</p>` : ''}
+                        <p><strong>عدد البالغين:</strong> ${transaction.adults || 1}</p>
+                        <p><strong>عدد الأطفال:</strong> ${transaction.children || 0}</p>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h5 class="font-semibold text-gray-900">حالة المعاملة</h5>
+                            <span class="${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">تاريخ الإنشاء</p>
+                            <p class="font-medium">${new Date(transaction.createdAt).toLocaleDateString('ar-SA')}</p>
+                        </div>
+                    </div>
+                </div>
+                ${transaction.message ? `
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <h5 class="font-semibold text-gray-900 mb-2">ملاحظات إضافية</h5>
+                        <p class="text-gray-700">${transaction.message}</p>
+                    </div>
+                ` : ''}
+                ${transaction.rating > 0 ? `
+                    <div class="mt-4 p-4 bg-yellow-50 rounded-lg">
+                        <h5 class="font-semibold text-gray-900 mb-2">التقييم</h5>
+                        <div class="flex">
+                            ${'⭐'.repeat(transaction.rating)}
+                            <span class="mr-2 text-gray-600">(${transaction.rating}/5)</span>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function getStatusClass(status) {
+            const statusClasses = {
+                'pending': 'status-pending',
+                'processing': 'status-processing',
+                'completed': 'status-completed',
+                'cancelled': 'status-cancelled'
+            };
+            return statusClasses[status] || 'status-pending';
+        }
+
+        function getStatusText(status) {
+            const statusTexts = {
+                'pending': 'قيد الانتظار',
+                'processing': 'قيد المعالجة',
+                'completed': 'مكتملة',
+                'cancelled': 'ملغية'
+            };
+            return statusTexts[status] || 'قيد الانتظار';
+        }
+
+        // Gallery functions
+        function filterGallery(category) {
+            const buttons = document.querySelectorAll('.gallery-filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const activeButton = document.querySelector(`[onclick="filterGallery('${category}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            updateGallery(category);
+        }
+
+        function updateGallery(filterCategory = 'all') {
+            const galleryContainer = document.getElementById('galleryContainer');
+            const adminGalleryContainer = document.getElementById('adminGalleryContainer');
+            
+            const images = currentData.filter(item => item.type === 'image');
+            const filteredImages = filterCategory === 'all' ? images : images.filter(img => img.category === filterCategory);
+            
+            const galleryHTML = filteredImages.length > 0 ? 
+                filteredImages.map(image => `
+                    <div class="gallery-item" data-category="${image.category}">
+                        <img src="${image.url}" alt="${image.title}" class="w-full h-64 object-cover" onerror="this.src=''; this.alt='فشل تحميل الصورة'; this.style.display='none';">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h4 class="text-white font-semibold">${image.title}</h4>
+                        </div>
+                    </div>
+                `).join('') :
+                `<div class="text-center col-span-full py-12">
+                    <div class="text-6xl mb-4">📸</div>
+                    <p class="text-gray-600">لا توجد صور في هذا التصنيف</p>
+                </div>`;
+            
+            if (galleryContainer) {
+                galleryContainer.innerHTML = galleryHTML;
+            }
+            
+            // Admin gallery with delete buttons
+            if (adminGalleryContainer) {
+                const adminGalleryHTML = images.length > 0 ?
+                    images.map(image => `
+                        <div class="gallery-item relative" data-category="${image.category}">
+                            <img src="${image.url}" alt="${image.title}" class="w-full h-64 object-cover" onerror="this.src=''; this.alt='فشل تحميل الصورة'; this.style.display='none';">
+                            <div class="absolute top-2 right-2">
+                                <button onclick="deleteImage('${image.__backendId}')" class="action-button delete">
+                                    🗑️
+                                </button>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                <h4 class="text-white font-semibold">${image.title}</h4>
+                                <p class="text-white text-sm opacity-75">${getCategoryText(image.category)}</p>
+                            </div>
+                        </div>
+                    `).join('') :
+                    `<div class="text-center col-span-full py-12">
+                        <div class="text-6xl mb-4">📸</div>
+                        <p class="text-gray-600">لا توجد صور في المعرض حالياً</p>
+                    </div>`;
+                
+                adminGalleryContainer.innerHTML = adminGalleryHTML;
+            }
+        }
+
+        function getCategoryText(category) {
+            const categoryTexts = {
+                'umrah': 'عمرة',
+                'hajj': 'حج',
+                'tourism': 'سياحة',
+                'hotel': 'فنادق'
+            };
+            return categoryTexts[category] || category;
+        }
+
+        // Admin login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            
+            loginSpinner.classList.remove('hidden');
+            loginText.textContent = 'جاري التحقق...';
+            loginBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const username = formData.get('username');
+                const password = formData.get('password');
+                
+                const user = currentData.find(item => 
+                    item.type === 'user' && 
+                    item.username === username && 
+                    item.password === password &&
+                    item.active
+                );
+                
+                if (user) {
+                    isLoggedIn = true;
+                    currentUser = user;
+                    
+                    // Update last login
+                    const updatedUser = { ...user, last_login: new Date().toISOString() };
+                    if (window.dataSdk) {
+                        await window.dataSdk.update(updatedUser);
+                    }
+                    
+                    document.getElementById('adminLogin').classList.add('hidden');
+                    document.getElementById('adminDashboard').classList.remove('hidden');
+                    showToast('تم تسجيل الدخول بنجاح!', 'success');
+                } else {
+                    showToast('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+                }
+            } catch (error) {
+                showToast('حدث خطأ أثناء تسجيل الدخول', 'error');
+            } finally {
+                loginSpinner.classList.add('hidden');
+                loginText.textContent = 'تسجيل الدخول';
+                loginBtn.disabled = false;
+            }
+        });
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            document.getElementById('adminLogin').classList.remove('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+            showToast('تم تسجيل الخروج بنجاح', 'info');
+        }
+
+        // Update all tables and displays
+        function updateAllTables() {
+            updateTransactionsTable();
+            updateServicesManagement();
+            updatePackagesManagement();
+        }
+
+        function updateTransactionsTable() {
+            const tableBody = document.getElementById('adminTransactionsTable');
+            if (!tableBody) return;
+            
+            const transactions = currentData.filter(item => item.type === 'transaction');
+            
+            if (transactions.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-gray-500 py-8">
+                            لا توجد معاملات حالياً
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = transactions.map(transaction => `
+                <tr>
+                    <td>${transaction.name}</td>
+                    <td>${transaction.passport_number}</td>
+                    <td>${transaction.service}</td>
+                    <td>${transaction.phone}</td>
+                    <td>${transaction.rating > 0 ? '⭐'.repeat(transaction.rating) : 'لا يوجد'}</td>
+                    <td><span class="${getStatusClass(transaction.status)}">${getStatusText(transaction.status)}</span></td>
+                    <td>${new Date(transaction.createdAt).toLocaleDateString('ar-SA')}</td>
+                    <td>
+                        <button onclick="openStatusModal('${transaction.__backendId}')" class="action-button edit">تحديث</button>
+                        <button onclick="deleteTransaction('${transaction.__backendId}')" class="action-button delete">حذف</button>
+                        <button onclick="viewTransaction('${transaction.__backendId}')" class="action-button view">عرض</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateServicesManagement() {
+            const container = document.getElementById('servicesManagementGrid');
+            if (!container) return;
+            
+            const services = currentData.filter(item => item.type === 'service');
+            
+            if (services.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-6xl mb-4">🎯</div>
+                        <p class="text-gray-600">لا توجد خدمات حالياً</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = services.map(service => `
+                <div class="service-card">
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">${service.service_icon}</div>
+                        <h4 class="text-xl font-bold text-gray-900">${service.service_name}</h4>
+                    </div>
+                    <p class="text-gray-600 mb-4">${service.service_description}</p>
+                    <div class="flex gap-2">
+                        <button onclick="editService('${service.__backendId}')" class="action-button edit flex-1">تعديل</button>
+                        <button onclick="deleteService('${service.__backendId}')" class="action-button delete flex-1">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updatePackagesManagement() {
+            const container = document.getElementById('packagesManagementGrid');
+            if (!container) return;
+            
+            const packages = currentData.filter(item => item.type === 'package');
+            
+            if (packages.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-6xl mb-4">📦</div>
+                        <p class="text-gray-600">لا توجد باقات حالياً</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = packages.map(pkg => `
+                <div class="package-card">
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">${pkg.package_image}</div>
+                        <h4 class="text-xl font-bold text-gray-900">${pkg.package_name}</h4>
+                        <p class="text-gray-600">${pkg.package_description}</p>
+                    </div>
+                    <div class="mb-4">
+                        <div class="text-2xl font-bold text-green-600 text-center">${pkg.package_price} ريال</div>
+                        <div class="text-sm text-gray-600 text-center">${pkg.package_duration}</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editPackage('${pkg.__backendId}')" class="action-button edit flex-1">تعديل</button>
+                        <button onclick="deletePackage('${pkg.__backendId}')" class="action-button delete flex-1">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateServicesAndPackages() {
+            // Update public services display
+            const servicesGrid = document.getElementById('servicesGrid');
+            if (servicesGrid) {
+                const services = currentData.filter(item => item.type === 'service' && item.service_active);
+                
+                if (services.length === 0) {
+                    servicesGrid.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <p class="text-gray-600">لا توجد خدمات متاحة حالياً</p>
+                        </div>
+                    `;
+                } else {
+                    servicesGrid.innerHTML = services.map(service => `
+                        <div class="service-card text-center">
+                            <div class="text-5xl mb-4">${service.service_icon}</div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">${service.service_name}</h4>
+                            <p class="text-gray-600">${service.service_description}</p>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            // Update public packages display
+            const packagesGrid = document.getElementById('packagesGrid');
+            if (packagesGrid) {
+                const packages = currentData.filter(item => item.type === 'package' && item.package_active);
+                
+                if (packages.length === 0) {
+                    packagesGrid.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <div class="text-6xl mb-4">📦</div>
+                            <p class="text-gray-600">لا توجد باقات متاحة حالياً</p>
+                        </div>
+                    `;
+                } else {
+                    packagesGrid.innerHTML = packages.map(pkg => `
+                        <div class="package-card">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">${pkg.package_image}</div>
+                                <h4 class="text-2xl font-bold text-gray-900 mb-2">${pkg.package_name}</h4>
+                                <p class="text-gray-600 mb-4">${pkg.package_description}</p>
+                                <div class="text-3xl font-bold text-green-600">${pkg.package_price} ريال</div>
+                                <div class="text-sm text-gray-600">${pkg.package_duration}</div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h5 class="font-semibold text-gray-900 mb-3">يشمل:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    ${pkg.package_features.split(',').map(feature => `<li>• ${feature.trim()}</li>`).join('')}
+                                </ul>
+                            </div>
+                            
+                            <button onclick="showTab('booking')" class="btn-primary w-full py-3">
+                                احجز الآن
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function updateDashboardStats() {
+            const transactions = currentData.filter(item => item.type === 'transaction');
+            const images = currentData.filter(item => item.type === 'image');
+            
+            const totalTransactions = transactions.length;
+            const pendingTransactions = transactions.filter(t => t.status === 'pending').length;
+            const completedTransactions = transactions.filter(t => t.status === 'completed').length;
+            const totalImages = images.length;
+            
+            // Update dashboard KPIs
+            const dashboardTotal = document.getElementById('dashboardTotalTransactions');
+            const dashboardPending = document.getElementById('dashboardPendingTransactions');
+            const dashboardCompleted = document.getElementById('dashboardCompletedTransactions');
+            const dashboardImages = document.getElementById('dashboardTotalImages');
+            
+            if (dashboardTotal) dashboardTotal.textContent = totalTransactions;
+            if (dashboardPending) dashboardPending.textContent = pendingTransactions;
+            if (dashboardCompleted) dashboardCompleted.textContent = completedTransactions;
+            if (dashboardImages) dashboardImages.textContent = totalImages;
+        }
+
+        function updateNotificationBadge() {
+            const pendingTransactions = currentData.filter(item => 
+                item.type === 'transaction' && item.status === 'pending'
+            ).length;
+            
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+                if (pendingTransactions > 0) {
+                    badge.textContent = pendingTransactions;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
+        function updateCharts() {
+            updateMonthlyTransactionsChart();
+            updateServicesDistributionChart();
+        }
+
+        function updateMonthlyTransactionsChart() {
+            const ctx = document.getElementById('monthlyTransactionsChart');
+            if (!ctx) return;
+            
+            if (charts.monthlyTransactions) {
+                charts.monthlyTransactions.destroy();
+            }
+            
+            const transactions = currentData.filter(item => item.type === 'transaction');
+            const monthlyData = {};
+            
+            transactions.forEach(transaction => {
+                const month = new Date(transaction.createdAt).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long' });
+                monthlyData[month] = (monthlyData[month] || 0) + 1;
+            });
+            
+            const labels = Object.keys(monthlyData);
+            const data = Object.values(monthlyData);
+            
+            charts.monthlyTransactions = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'المعاملات الشهرية',
+                        data: data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateServicesDistributionChart() {
+            const ctx = document.getElementById('servicesDistributionChart');
+            if (!ctx) return;
+            
+            if (charts.servicesDistribution) {
+                charts.servicesDistribution.destroy();
+            }
+            
+            const transactions = currentData.filter(item => item.type === 'transaction');
+            const serviceData = {};
+            
+            transactions.forEach(transaction => {
+                const service = transaction.service || 'غير محدد';
+                serviceData[service] = (serviceData[service] || 0) + 1;
+            });
+            
+            const labels = Object.keys(serviceData);
+            const data = Object.values(serviceData);
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            
+            charts.servicesDistribution = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Modal functions
+        function openAddImageModal() {
+            document.getElementById('addImageModal').classList.remove('hidden');
+        }
+
+        function closeAddImageModal() {
+            document.getElementById('addImageModal').classList.add('hidden');
+            document.getElementById('addImageForm').reset();
+        }
+
+        function openStatusModal(transactionId) {
+            const transaction = currentData.find(item => item.__backendId === transactionId);
+            if (transaction) {
+                document.getElementById('updateTransactionId').value = transactionId;
+                document.getElementById('newStatus').value = transaction.status;
+                document.getElementById('statusModal').classList.remove('hidden');
+            }
+        }
+
+        function closeStatusModal() {
+            document.getElementById('statusModal').classList.add('hidden');
+            document.getElementById('statusUpdateForm').reset();
+        }
+
+        // Add image form handling
+        document.getElementById('addImageForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (recordCount >= 999) {
+                showToast('تم الوصول للحد الأقصى من السجلات (999). يرجى حذف بعض السجلات أولاً.', 'warning');
+                return;
+            }
+            
+            const addImageBtn = document.getElementById('addImageBtn');
+            const addImageText = document.getElementById('addImageText');
+            const addImageSpinner = document.getElementById('addImageSpinner');
+            
+            addImageSpinner.classList.remove('hidden');
+            addImageText.textContent = 'جاري الإضافة...';
+            addImageBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const imageData = {
+                    id: 'image-' + Date.now(),
+                    type: 'image',
+                    title: formData.get('title'),
+                    url: formData.get('url'),
+                    category: formData.get('type'),
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (window.dataSdk) {
+                    const result = await window.dataSdk.create(imageData);
+                    if (result.isOk) {
+                        showToast('تم إضافة الصورة بنجاح!', 'success');
+                        closeAddImageModal();
+                    } else {
+                        showToast('حدث خطأ أثناء إضافة الصورة.', 'error');
+                    }
+                }
+            } catch (error) {
+                showToast('حدث خطأ غير متوقع.', 'error');
+            } finally {
+                addImageSpinner.classList.add('hidden');
+                addImageText.textContent = 'إضافة';
+                addImageBtn.disabled = false;
+            }
+        });
+
+        // Status update form handling
+        document.getElementById('statusUpdateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const updateStatusBtn = document.getElementById('updateStatusBtn');
+            const updateStatusText = document.getElementById('updateStatusText');
+            const updateStatusSpinner = document.getElementById('updateStatusSpinner');
+            
+            updateStatusSpinner.classList.remove('hidden');
+            updateStatusText.textContent = 'جاري التحديث...';
+            updateStatusBtn.disabled = true;
+            
+            try {
+                const transactionId = document.getElementById('updateTransactionId').value;
+                const newStatus = document.getElementById('newStatus').value;
+                
+                const transaction = currentData.find(item => item.__backendId === transactionId);
+                if (transaction && window.dataSdk) {
+                    const updatedTransaction = {
+                        ...transaction,
+                        status: newStatus,
+                        updatedAt: new Date().toISOString()
+                    };
+                    
+                    const result = await window.dataSdk.update(updatedTransaction);
+                    if (result.isOk) {
+                        showToast('تم تحديث حالة المعاملة بنجاح!', 'success');
+                        closeStatusModal();
+                    } else {
+                        showToast('حدث خطأ أثناء تحديث الحالة.', 'error');
+                    }
+                }
+            } catch (error) {
+                showToast('حدث خطأ غير متوقع.', 'error');
+            } finally {
+                updateStatusSpinner.classList.add('hidden');
+                updateStatusText.textContent = 'تحديث';
+                updateStatusBtn.disabled = false;
+            }
+        });
+
+        // Delete functions
+        async function deleteTransaction(transactionId) {
+            const transaction = currentData.find(item => item.__backendId === transactionId);
+            if (transaction && window.dataSdk) {
+                const result = await window.dataSdk.delete(transaction);
+                if (result.isOk) {
+                    showToast('تم حذف المعاملة بنجاح!', 'success');
+                } else {
+                    showToast('حدث خطأ أثناء حذف المعاملة.', 'error');
+                }
+            }
+        }
+
+        async function deleteImage(imageId) {
+            const image = currentData.find(item => item.__backendId === imageId);
+            if (image && window.dataSdk) {
+                const result = await window.dataSdk.delete(image);
+                if (result.isOk) {
+                    showToast('تم حذف الصورة بنجاح!', 'success');
+                } else {
+                    showToast('حدث خطأ أثناء حذف الصورة.', 'error');
+                }
+            }
+        }
+
+        async function deleteService(serviceId) {
+            const service = currentData.find(item => item.__backendId === serviceId);
+            if (service && window.dataSdk) {
+                const result = await window.dataSdk.delete(service);
+                if (result.isOk) {
+                    showToast('تم حذف الخدمة بنجاح!', 'success');
+                } else {
+                    showToast('حدث خطأ أثناء حذف الخدمة.', 'error');
+                }
+            }
+        }
+
+        async function deletePackage(packageId) {
+            const pkg = currentData.find(item => item.__backendId === packageId);
+            if (pkg && window.dataSdk) {
+                const result = await window.dataSdk.delete(pkg);
+                if (result.isOk) {
+                    showToast('تم حذف الباقة بنجاح!', 'success');
+                } else {
+                    showToast('حدث خطأ أثناء حذف الباقة.', 'error');
+                }
+            }
+        }
+
+        // Placeholder functions for future implementation
+        function openAddServiceModal() {
+            showToast('ميزة إضافة الخدمات ستكون متاحة قريباً', 'info');
+        }
+
+        function openAddPackageModal() {
+            showToast('ميزة إضافة الباقات ستكون متاحة قريباً', 'info');
+        }
+
+        function editService(serviceId) {
+            showToast('ميزة تعديل الخدمات ستكون متاحة قريباً', 'info');
+        }
+
+        function editPackage(packageId) {
+            showToast('ميزة تعديل الباقات ستكون متاحة قريباً', 'info');
+        }
+
+        function viewTransaction(transactionId) {
+            const transaction = currentData.find(item => item.__backendId === transactionId);
+            if (transaction) {
+                showToast(`عرض تفاصيل معاملة: ${transaction.name}`, 'info');
+            }
+        }
+
+        // Settings management
+        function updateSiteContent() {
+            const settings = currentData.find(item => item.type === 'settings') || defaultConfig;
+            
+            // Update navigation
+            const navCompanyName = document.getElementById('nav-company-name');
+            const navCompanyTagline = document.getElementById('nav-company-tagline');
+            if (navCompanyName) navCompanyName.textContent = settings.company_name || defaultConfig.company_name;
+            if (navCompanyTagline) navCompanyTagline.textContent = settings.company_tagline || defaultConfig.company_tagline;
+            
+            // Update hero section
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            if (heroTitle) heroTitle.textContent = settings.hero_title || defaultConfig.hero_title;
+            if (heroSubtitle) heroSubtitle.textContent = settings.hero_subtitle || defaultConfig.hero_subtitle;
+            
+            // Update contact info
+            const contactPhone = document.getElementById('contact-phone');
+            const contactEmail = document.getElementById('contact-email');
+            if (contactPhone) contactPhone.textContent = settings.phone_number || defaultConfig.phone_number;
+            if (contactEmail) contactEmail.textContent = settings.email_address || defaultConfig.email_address;
+            
+            // Update footer
+            const footerCompanyName = document.getElementById('footer-company-name');
+            const footerCompanyTagline = document.getElementById('footer-company-tagline');
+            const footerPhone = document.getElementById('footer-phone');
+            const footerEmail = document.getElementById('footer-email');
+            
+            if (footerCompanyName) footerCompanyName.textContent = settings.company_name || defaultConfig.company_name;
+            if (footerCompanyTagline) footerCompanyTagline.textContent = settings.company_tagline || defaultConfig.company_tagline;
+            if (footerPhone) footerPhone.textContent = `📞 ${settings.phone_number || defaultConfig.phone_number}`;
+            if (footerEmail) footerEmail.textContent = `✉️ ${settings.email_address || defaultConfig.email_address}`;
+        }
+
+        function loadSettingsForm() {
+            const settings = currentData.find(item => item.type === 'settings') || defaultConfig;
+            
+            const companyNameInput = document.getElementById('settings_company_name');
+            const companyTaglineInput = document.getElementById('settings_company_tagline');
+            const phoneInput = document.getElementById('settings_phone');
+            const emailInput = document.getElementById('settings_email');
+            const heroTitleInput = document.getElementById('settings_hero_title');
+            const heroSubtitleInput = document.getElementById('settings_hero_subtitle');
+            
+            if (companyNameInput) companyNameInput.value = settings.company_name || defaultConfig.company_name;
+            if (companyTaglineInput) companyTaglineInput.value = settings.company_tagline || defaultConfig.company_tagline;
+            if (phoneInput) phoneInput.value = settings.phone_number || defaultConfig.phone_number;
+            if (emailInput) emailInput.value = settings.email_address || defaultConfig.email_address;
+            if (heroTitleInput) heroTitleInput.value = settings.hero_title || defaultConfig.hero_title;
+            if (heroSubtitleInput) heroSubtitleInput.value = settings.hero_subtitle || defaultConfig.hero_subtitle;
+        }
+
+        // Settings form handling
+        document.getElementById('settingsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const saveSettingsText = document.getElementById('saveSettingsText');
+            const saveSettingsSpinner = document.getElementById('saveSettingsSpinner');
+            
+            saveSettingsSpinner.classList.remove('hidden');
+            saveSettingsText.textContent = 'جاري الحفظ...';
+            saveSettingsBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const existingSettings = currentData.find(item => item.type === 'settings');
+                
+                const settingsData = {
+                    id: existingSettings?.id || 'settings-' + Date.now(),
+                    type: 'settings',
+                    company_name: formData.get('company_name'),
+                    company_tagline: formData.get('company_tagline'),
+                    phone_number: formData.get('phone_number'),
+                    email_address: formData.get('email_address'),
+                    hero_title: formData.get('hero_title'),
+                    hero_subtitle: formData.get('hero_subtitle'),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                if (existingSettings) {
+                    settingsData.createdAt = existingSettings.createdAt;
+                } else {
+                    settingsData.createdAt = new Date().toISOString();
+                }
+                
+                if (window.dataSdk) {
+                    let result;
+                    if (existingSettings) {
+                        result = await window.dataSdk.update({ ...existingSettings, ...settingsData });
+                    } else {
+                        if (recordCount >= 999) {
+                            showToast('تم الوصول للحد الأقصى من السجلات (999).', 'warning');
+                            return;
+                        }
+                        result = await window.dataSdk.create(settingsData);
+                    }
+                    
+                    if (result.isOk) {
+                        showToast('تم حفظ الإعدادات بنجاح!', 'success');
+                    } else {
+                        showToast('حدث خطأ أثناء حفظ الإعدادات.', 'error');
+                    }
+                }
+            } catch (error) {
+                showToast('حدث خطأ غير متوقع.', 'error');
+            } finally {
+                saveSettingsSpinner.classList.add('hidden');
+                saveSettingsText.textContent = 'حفظ الإعدادات';
+                saveSettingsBtn.disabled = false;
+            }
+        });
+
+        // Element SDK Configuration
+        async function onConfigChange(config) {
+            // Update CSS variables
+            document.documentElement.style.setProperty('--bg-color', config.background_color || defaultConfig.background_color);
+            document.documentElement.style.setProperty('--surface-color', config.surface_color || defaultConfig.surface_color);
+            document.documentElement.style.setProperty('--text-color', config.text_color || defaultConfig.text_color);
+            document.documentElement.style.setProperty('--primary-color', config.primary_action_color || defaultConfig.primary_action_color);
+            document.documentElement.style.setProperty('--secondary-color', config.secondary_action_color || defaultConfig.secondary_action_color);
+            
+            // Update font
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFontStack = 'Arial, sans-serif';
+            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            
+            // Update font sizes
+            const baseSize = config.font_size || defaultConfig.font_size;
+            document.documentElement.style.fontSize = `${baseSize}px`;
+            
+            // Update text content
+            updateTextContent(config);
+        }
+
+        function updateTextContent(config) {
+            // Update navigation
+            const navCompanyName = document.getElementById('nav-company-name');
+            const navCompanyTagline = document.getElementById('nav-company-tagline');
+            if (navCompanyName) navCompanyName.textContent = config.company_name || defaultConfig.company_name;
+            if (navCompanyTagline) navCompanyTagline.textContent = config.company_tagline || defaultConfig.company_tagline;
+            
+            // Update hero section
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            if (heroTitle) heroTitle.textContent = config.hero_title || defaultConfig.hero_title;
+            if (heroSubtitle) heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+            
+            // Update contact info
+            const contactPhone = document.getElementById('contact-phone');
+            const contactEmail = document.getElementById('contact-email');
+            if (contactPhone) contactPhone.textContent = config.phone_number || defaultConfig.phone_number;
+            if (contactEmail) contactEmail.textContent = config.email_address || defaultConfig.email_address;
+            
+            // Update footer
+            const footerCompanyName = document.getElementById('footer-company-name');
+            const footerCompanyTagline = document.getElementById('footer-company-tagline');
+            const footerPhone = document.getElementById('footer-phone');
+            const footerEmail = document.getElementById('footer-email');
+            
+            if (footerCompanyName) footerCompanyName.textContent = config.company_name || defaultConfig.company_name;
+            if (footerCompanyTagline) footerCompanyTagline.textContent = config.company_tagline || defaultConfig.company_tagline;
+            if (footerPhone) footerPhone.textContent = `📞 ${config.phone_number || defaultConfig.phone_number}`;
+            if (footerEmail) footerEmail.textContent = `✉️ ${config.email_address || defaultConfig.email_address}`;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.surface_color || defaultConfig.surface_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ surface_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_action_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ secondary_action_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || defaultConfig.font_family,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || defaultConfig.font_size,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["company_name", config.company_name || defaultConfig.company_name],
+                ["company_tagline", config.company_tagline || defaultConfig.company_tagline],
+                ["hero_title", config.hero_title || defaultConfig.hero_title],
+                ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle],
+                ["phone_number", config.phone_number || defaultConfig.phone_number],
+                ["email_address", config.email_address || defaultConfig.email_address]
+            ]);
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize rating system
+            setupRating();
+            
+            // Initialize Data SDK
+            await initializeDataSdk();
+            
+            // Initialize Element SDK
+            if (window.elementSdk) {
+                window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities,
+                    mapToEditPanelValues
+                });
+            }
+            
+            // Set initial content
+            updateSiteContent();
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999423556684e18d',t:'MTc2MjI1OTU4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
