@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://abdulilh.github.io/sitemap.xml
